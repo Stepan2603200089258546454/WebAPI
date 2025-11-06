@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36616.10 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI", "WebAPI\WebAPI.csproj", "{7B95F51D-F0E2-4EE1-8BE5-4E2C72A8E84B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataContext", "DataContext\DataContext.csproj", "{52FA0F52-5BFB-45AC-819D-8D05AD8337B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic", "Logic\Logic.csproj", "{7019F1E9-DCE0-4817-833F-353B21B31D0F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7B95F51D-F0E2-4EE1-8BE5-4E2C72A8E84B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B95F51D-F0E2-4EE1-8BE5-4E2C72A8E84B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B95F51D-F0E2-4EE1-8BE5-4E2C72A8E84B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B95F51D-F0E2-4EE1-8BE5-4E2C72A8E84B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52FA0F52-5BFB-45AC-819D-8D05AD8337B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52FA0F52-5BFB-45AC-819D-8D05AD8337B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52FA0F52-5BFB-45AC-819D-8D05AD8337B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52FA0F52-5BFB-45AC-819D-8D05AD8337B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7019F1E9-DCE0-4817-833F-353B21B31D0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7019F1E9-DCE0-4817-833F-353B21B31D0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7019F1E9-DCE0-4817-833F-353B21B31D0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7019F1E9-DCE0-4817-833F-353B21B31D0F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {20D30980-9F41-404E-AE54-9ADE2C67F63C}
+	EndGlobalSection
+EndGlobal
