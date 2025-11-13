@@ -1,7 +1,5 @@
 ﻿using DataContext.Models;
 using DataContext.Repositories;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +13,10 @@ namespace Logic.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IJWTProvider _jwtProvider;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        public UserServices(IUserRepository userRepository, IJWTProvider jwtProvider, SignInManager<ApplicationUser> signInManager)
+        public UserServices(IUserRepository userRepository, IJWTProvider jwtProvider)
         {
             _userRepository = userRepository;
             _jwtProvider = jwtProvider;
-            _signInManager = signInManager;
         }
 
         public async Task<bool> RegisterAsync(string email, string password)
