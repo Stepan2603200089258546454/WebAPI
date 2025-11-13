@@ -1,5 +1,6 @@
 ﻿using DataContext.Context;
 using DataContext.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,24 +12,36 @@ namespace DataContext.Repositories
 {
     internal class UserRepository : IUserRepository
     {
-        private readonly DBContext _context;
-        public UserRepository(DBContext context)
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
+
+        public UserRepository(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
         {
-            _context = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
-        public async Task AddAsync(string email, string password)
+        public async Task<bool> CreateAsync(string email, string password)
         {
-            var user = new UserEntity(Guid.NewGuid(), email, password);
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
+            ApplicationUser user = new ApplicationUser
+            {
+                UserName = email,
+                Email = email,
+            };
+            IdentityResult result = await _userManager.CreateAsync(user, password);
+            return result.Succeeded;
         }
-
-        public async Task<UserEntity> Get(string email)
+        public async Task<ApplicationUser> FindByEmailAsync(string email)
         {
-            return await _context.Users
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Email == email) ?? throw new Exception($"User not found");
+            return await _userManager.FindByEmailAsync(email) ?? throw new InvalidOperationException("User not found");
+        }
+        public async Task<IList<string>> GetRolesAsync(ApplicationUser user)
+        {
+            return await _userManager.GetRolesAsync(user);
+        }
+        public async Task<bool> CheckPasswordAsync(ApplicationUser user, string password)
+        {
+            return await _userManager.CheckPasswordAsync(user, password);
         }
     }
 }

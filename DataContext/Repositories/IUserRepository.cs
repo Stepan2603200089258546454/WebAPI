@@ -4,7 +4,9 @@ namespace DataContext.Repositories
 {
     public interface IUserRepository
     {
-        Task AddAsync(string email, string password);
-        Task<UserEntity> Get(string email);
+        Task<bool> CheckPasswordAsync(ApplicationUser user, string password);
+        Task<bool> CreateAsync(string email, string password);
+        Task<ApplicationUser> FindByEmailAsync(string email);
+        Task<IList<string>> GetRolesAsync(ApplicationUser user);
     }
 }
