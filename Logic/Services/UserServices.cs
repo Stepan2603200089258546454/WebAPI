@@ -1,5 +1,7 @@
-﻿using DataContext.Models;
+﻿using DataContext.Abstractions.Interfaces;
+using DataContext.Models;
 using DataContext.Repositories;
+using Logic.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,16 +21,11 @@ namespace Logic.Services
             _jwtProvider = jwtProvider;
         }
 
-        public async Task<bool> RegisterAsync(string email, string password)
+        private async Task<string> GetJwtFromUserAsync(ApplicationUser user)
         {
-            return await _userRepository.CreateAsync(email, password);
-        }
-        public async Task<string> LoginAsync(string email, string password)
-        {
-            ApplicationUser user = await _userRepository.FindByEmailAsync(email);
-            if (user != null && await _userRepository.CheckPasswordAsync(user, password))
-            {
-                List<Claim> claims = new List<Claim>()
+            if (user is null) throw new InvalidOperationException("User is null");
+
+            List<Claim> claims = new List<Claim>()
                 {
                     new Claim(ClaimTypes.Authentication, user.Id.ToString()),
                     new Claim(ClaimTypes.NameIdentifier, user.Id),
@@ -36,10 +33,37 @@ namespace Logic.Services
                     new Claim(ClaimTypes.Email, user.Email?.ToString() ?? string.Empty),
                 };
 
-                foreach (string role in await _userRepository.GetRolesAsync(user))
-                    claims.Add(new Claim(ClaimTypes.Role, role));
+            foreach (string role in await _userRepository.GetRolesAsync(user))
+                claims.Add(new Claim(ClaimTypes.Role, role));
 
-                return _jwtProvider.GenerateToken(claims);
+            return _jwtProvider.GenerateToken(claims);
+        }
+
+        /// <summary>
+        /// Регистрация пользователя
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        /// <returns>Jwt token</returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public async Task<string> RegisterAsync(string email, string password)
+        {
+            ApplicationUser user = await _userRepository.CreateAsync(email, password);
+            return await GetJwtFromUserAsync(user);
+        }
+        /// <summary>
+        /// Вход пользователя в систему
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        /// <returns>Jwt token</returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public async Task<string> LoginAsync(string email, string password)
+        {
+            ApplicationUser user = await _userRepository.FindByEmailAsync(email);
+            if (user != null && await _userRepository.CheckPasswordAsync(user, password))
+            {
+                return await GetJwtFromUserAsync(user);
             }
             else
             {

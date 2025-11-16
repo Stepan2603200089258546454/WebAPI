@@ -1,4 +1,5 @@
-﻿using DataContext.Context;
+﻿using DataContext.Abstractions.Interfaces;
+using DataContext.Context;
 using DataContext.Models;
 using DataContext.Repositories;
 using Microsoft.AspNetCore.Identity;
@@ -51,6 +52,10 @@ namespace DataContext
                 .AddDefaultTokenProviders();
 
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IDrivingSchoolRepository, DrivingSchoolRepository>();
+            builder.Services.AddScoped<IHavingsRepository, HavingsRepository>();
+            builder.Services.AddScoped<IPositionRepository, PositionRepository>();
+            builder.Services.AddScoped<IRefPositionRepository, RefPositionRepository>();
         }
     }
 }

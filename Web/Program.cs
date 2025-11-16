@@ -119,4 +119,7 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
+// инициализация данных и миграций
+await app.Initialize();
+
 app.Run();

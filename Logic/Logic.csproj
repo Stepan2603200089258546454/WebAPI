@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DataContext.Abstractions\DataContext.Abstractions.csproj" />
     <ProjectReference Include="..\DataContext\DataContext.csproj" />
   </ItemGroup>
 

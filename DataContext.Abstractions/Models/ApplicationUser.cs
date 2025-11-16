@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using DataContext.Abstractions.Models;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace DataContext.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        
+        public int? IdPosition { get; set; }
+        public Position? Position { get; set; }
     }
 }

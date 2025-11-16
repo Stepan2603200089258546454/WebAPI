@@ -27,4 +27,8 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DataContext.Abstractions\DataContext.Abstractions.csproj" />
+  </ItemGroup>
+
 </Project>

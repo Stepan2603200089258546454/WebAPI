@@ -1,7 +1,6 @@
-﻿using DataContext.Context;
+﻿using DataContext.Abstractions.Interfaces;
 using DataContext.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +20,7 @@ namespace DataContext.Repositories
             _roleManager = roleManager;
         }
 
-        public async Task<bool> CreateAsync(string email, string password)
+        public async Task<ApplicationUser> CreateAsync(string email, string password)
         {
             ApplicationUser user = new ApplicationUser
             {
@@ -29,7 +28,7 @@ namespace DataContext.Repositories
                 Email = email,
             };
             IdentityResult result = await _userManager.CreateAsync(user, password);
-            return result.Succeeded;
+            return result.Succeeded ? user : throw new InvalidOperationException(string.Join("; ", result.Errors.Select(x => x.Description)));
         }
         public async Task<ApplicationUser> FindByEmailAsync(string email)
         {

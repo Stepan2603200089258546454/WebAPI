@@ -1,6 +1,7 @@
 ﻿using DataContext.Models;
 using DataContext.Repositories;
 using Logic.Configurations;
+using Logic.Services.Interfaces;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

@@ -1,7 +1,7 @@
 ﻿using DataContext.Models;
 using System.Security.Claims;
 
-namespace Logic.Services
+namespace Logic.Services.Interfaces
 {
     internal interface IJWTProvider
     {

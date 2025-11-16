@@ -6,6 +6,7 @@
         {
             builder.MapUserEndpoints();
             builder.MapTestEndpoints();
+            builder.MapRefPositionEndpoints();
 
             return builder;
         }

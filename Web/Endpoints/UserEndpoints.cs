@@ -1,7 +1,8 @@
-﻿using Logic.Services;
+﻿using Logic.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using Web.Models.Request;
 
 namespace Web.Endpoints
@@ -16,22 +17,36 @@ namespace Web.Endpoints
             return builder;
         }
 
+        /// <summary>
+        /// В куки устанавливает токен, только для отладки
+        /// </summary>
+        [Conditional("DEBUG")]
+        private static void AppendCookiesDebug(HttpContext context, string token)
+        {
+            context.Response.Cookies.Append(JwtBearerDefaults.AuthenticationScheme, token);
+        }
+
         private static async Task<IResult> RegisterAsync(
             RegisterUserRequest request,
             HttpContext context,
             [FromServices] IUserServices userService)
         {
-            bool result = await userService.RegisterAsync(request.Email, request.Password);
-            if (result)
+            try
             {
-                string token = await userService.LoginAsync(request.Email, request.Password);
+                string token = await userService.RegisterAsync(request.Email, request.Password);
 
-                context.Response.Cookies.Append(JwtBearerDefaults.AuthenticationScheme, token);
+                AppendCookiesDebug(context, token);
 
                 return Results.Ok(token);
             }
-            else
-                return Results.BadRequest("Error from register");
+            catch (Exception ex)
+            {
+#if DEBUG
+                return Results.BadRequest(ex.Message);
+#else
+                return Results.BadRequest("Error");
+#endif
+            }
         }
         private static async Task<IResult> LoginAsync(
             LoginUserRequest request,
@@ -42,7 +57,7 @@ namespace Web.Endpoints
             {
                 string token = await userService.LoginAsync(request.Email, request.Password);
 
-                context.Response.Cookies.Append(JwtBearerDefaults.AuthenticationScheme, token);
+                AppendCookiesDebug(context, token);
 
                 return Results.Ok(token);
             }
