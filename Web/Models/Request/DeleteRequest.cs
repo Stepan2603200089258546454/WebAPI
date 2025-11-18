@@ -2,7 +2,7 @@
 
 namespace Web.Models.Request
 {
-    public class DeleteRefPositionRequest
+    public class DeleteRequest
     {
         [Required] public int Id { get; set; }
     }

@@ -6,11 +6,11 @@ using Web.Models.Response;
 
 namespace Web.Endpoints
 {
-    internal static class RefPositionEndpoints
+    internal static class PositionEndpoints
     {
-        public static IEndpointRouteBuilder MapRefPositionEndpoints(this IEndpointRouteBuilder builder)
+        public static IEndpointRouteBuilder MapPositionEndpoints(this IEndpointRouteBuilder builder)
         {
-            RouteGroupBuilder group = builder.MapGroup("/RefPosition")
+            RouteGroupBuilder group = builder.MapGroup("/Position")
                 .RequireAuthorization("JwtPolicy");
 
             group.MapPost("/Get", Get);
@@ -22,26 +22,26 @@ namespace Web.Endpoints
 
         private static async Task<IResult> Get(
             GetRequest request,
-            [FromServices] IRefPositionService service,
+            [FromServices] IPositionService service,
             [FromServices] IMapper mapper)
         {
             return TypedResults.Ok(
-                mapper.Map<IList<ResponseRefPosition>>(
+                mapper.Map<IList<ResponsePosition>>(
                     await service.GetAsync(request.Page, request.PageSize
                     )
                 )
             );
         }
         private static async Task<IResult> Update(
-            UpdateRefPositionRequest request,
-            [FromServices] IRefPositionService service)
+            UpdatePositionRequest request,
+            [FromServices] IPositionService service)
         {
-            await service.UpdateAsync(request.Id, request.Name, request.Salary);
+            await service.UpdateAsync(request.Id, request.IdDrivingSchool, request.IdRefPosition, request.IdUser, request.Salary);
             return TypedResults.Ok();
         }
         private static async Task<IResult> Delete(
             DeleteRequest request,
-            [FromServices] IRefPositionService service)
+            [FromServices] IPositionService service)
         {
             await service.DeleteAsync(request.Id);
             return TypedResults.Ok();

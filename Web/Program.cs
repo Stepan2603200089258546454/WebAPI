@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using System.Text;
 using Web.Endpoints.Base;
+using Web.Mapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -81,6 +82,10 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.UseLogic();
+builder.Services.AddAutoMapper(st =>
+{
+    st.AddProfile<AppMappingProfile>();
+});
 
 var app = builder.Build();
 

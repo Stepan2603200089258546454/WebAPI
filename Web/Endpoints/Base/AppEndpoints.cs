@@ -7,6 +7,9 @@
             builder.MapUserEndpoints();
             builder.MapTestEndpoints();
             builder.MapRefPositionEndpoints();
+            builder.MapPositionEndpoints();
+            builder.MapHavingsEndpoints();
+            builder.MapDrivingSchoolEndpoints();
 
             return builder;
         }

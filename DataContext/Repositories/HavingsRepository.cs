@@ -1,13 +1,15 @@
 ﻿using DataContext.Abstractions.Interfaces;
 using DataContext.Abstractions.Models;
 using DataContext.Context;
+using Domain.Options;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace DataContext.Repositories
 {
     internal class HavingsRepository : BaseRepository<Havings>, IHavingsRepository
     {
-        public HavingsRepository(ApplicationDbContext context) : base(context)
+        public HavingsRepository(ApplicationDbContext context, IOptions<DataBaseOptions> options) : base(context, options)
         {
 
         }

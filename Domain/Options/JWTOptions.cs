@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Logic.Configurations
+namespace Domain.Options
 {
-    internal class JWTOptions
+    public class JWTOptions
     {
         public string Key { get; set; }
         public int ExpiredHours { get; set; }

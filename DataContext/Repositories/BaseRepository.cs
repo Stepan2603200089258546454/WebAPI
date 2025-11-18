@@ -1,7 +1,9 @@
 ﻿using DataContext.Abstractions.Interfaces;
 using DataContext.Context;
+using Domain.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.Extensions.Options;
 using System.Linq.Expressions;
 
 namespace DataContext.Repositories
@@ -10,11 +12,13 @@ namespace DataContext.Repositories
     {
         protected readonly ApplicationDbContext _context;
         protected readonly DbSet<T> _table;
+        protected readonly DataBaseOptions _dbOptions;
 
-        public BaseRepository(ApplicationDbContext context)
+        public BaseRepository(ApplicationDbContext context, IOptions<DataBaseOptions> options)
         {
             _context = context;
             _table = _context.Set<T>();
+            _dbOptions = options.Value;
         }
 
         protected abstract IQueryable<T> Include(IQueryable<T> query);
@@ -77,14 +81,18 @@ namespace DataContext.Repositories
         }
         public virtual async Task<int> DeleteAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
         {
-            // не поддерживается в БД в памяти
-            //return await _table
-            //    .Where(predicate)
-            //    .ExecuteDeleteAsync(cancellationToken);
-
-            List<T> entityDeleted = await _table.Where(predicate).ToListAsync(cancellationToken);
-            _table.RemoveRange(entityDeleted);
-            return await _context.SaveChangesAsync(cancellationToken);
+            if (_dbOptions.DBType != DBType.InMemory)
+            {
+                List<T> entityDeleted = await _table.Where(predicate).ToListAsync(cancellationToken);
+                _table.RemoveRange(entityDeleted);
+                return await _context.SaveChangesAsync(cancellationToken);
+            }
+            else
+            {
+                return await _table
+                    .Where(predicate)
+                    .ExecuteDeleteAsync(cancellationToken);
+            }
         }
     }
 }

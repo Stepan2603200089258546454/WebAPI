@@ -2,10 +2,12 @@
 using DataContext.Context;
 using DataContext.Models;
 using DataContext.Repositories;
+using Domain.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +23,15 @@ namespace DataContext
             // Миграции EF Core
             using (IServiceScope scope = host.Services.CreateScope())
             {
+                await AutoMigrate(scope);
+            }
+        }
+        public static async Task AutoMigrate(IServiceScope scope)
+        {
+            DataBaseOptions dbOptions = scope.ServiceProvider.GetRequiredService<IOptions<DataBaseOptions>>().Value;
+            // Актуализируем БД только когда она не в памяти
+            if (dbOptions.DBType != DBType.InMemory)
+            {
                 using (ApplicationDbContext dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
                 {
                     if ((await dbContext.Database.GetPendingMigrationsAsync())?.Any() == true) //проверяем нужны ли миграции
@@ -30,17 +41,25 @@ namespace DataContext
         }
         public static void UseDB(this IHostApplicationBuilder builder)
         {
-            string connectionString = builder.Configuration["PostgreSettings:DefaultConnection"] ?? throw new InvalidOperationException("Строка подключения «DefaultConnection» не найдена.");
-            string version = builder.Configuration["PostgreSettings:Version"] ?? throw new InvalidOperationException("Не указана версия PostgreSQL");
+            builder.Services.Configure<DataBaseOptions>(builder.Configuration.GetSection(nameof(DataBaseOptions)));
 
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            builder.Services.AddDbContext<ApplicationDbContext>((provider, options) =>
             {
-                options.UseInMemoryDatabase("MemoryDB");
-
-                //options.UseNpgsql(connectionString, npgsqlOptions =>
-                //{
-                //    npgsqlOptions.SetPostgresVersion(Version.Parse(version));
-                //});
+                DataBaseOptions dbOptions = provider.GetRequiredService<IOptions<DataBaseOptions>>().Value;
+                
+                if (dbOptions.DBType == DBType.InMemory)
+                {
+                    if (dbOptions.MemorySettings is null) throw new ArgumentNullException(nameof(dbOptions.MemorySettings), "Настройки подключения к InMemory не найдены");
+                    options.UseInMemoryDatabase(dbOptions.MemorySettings.Name);
+                }
+                else if (dbOptions.DBType == DBType.PostgreSQL)
+                {
+                    if (dbOptions.PostgreSettings is null) throw new ArgumentNullException(nameof(dbOptions.PostgreSettings), "Настройки подключения к PostgreSQL не найдены");
+                    options.UseNpgsql(dbOptions.PostgreSettings.DefaultConnection, npgsqlOptions =>
+                    {
+                        npgsqlOptions.SetPostgresVersion(Version.Parse(dbOptions.PostgreSettings.Version));
+                    });
+                }
             });
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();

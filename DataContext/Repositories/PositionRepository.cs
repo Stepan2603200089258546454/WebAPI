@@ -1,13 +1,15 @@
 ﻿using DataContext.Abstractions.Interfaces;
 using DataContext.Abstractions.Models;
 using DataContext.Context;
+using Domain.Options;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace DataContext.Repositories
 {
     internal class PositionRepository : BaseRepository<Position>, IPositionRepository
     {
-        public PositionRepository(ApplicationDbContext context) : base(context)
+        public PositionRepository(ApplicationDbContext context, IOptions<DataBaseOptions> options) : base(context, options)
         {
 
         }
