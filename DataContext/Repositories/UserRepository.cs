@@ -1,5 +1,5 @@
 ﻿using DataContext.Abstractions.Interfaces;
-using DataContext.Models;
+using DataContext.Abstractions.Models;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;

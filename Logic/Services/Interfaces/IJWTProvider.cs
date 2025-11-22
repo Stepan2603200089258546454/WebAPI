@@ -1,5 +1,4 @@
-﻿using DataContext.Models;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 
 namespace Logic.Services.Interfaces
 {

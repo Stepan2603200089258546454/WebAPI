@@ -1,5 +1,4 @@
 ﻿using DataContext.Abstractions.Interfaces;
-using DataContext.Models;
 
 namespace DataContext.Abstractions.Models
 {

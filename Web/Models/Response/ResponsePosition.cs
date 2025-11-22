@@ -1,4 +1,4 @@
-﻿using DataContext.Models;
+﻿using DataContext.Abstractions.Models;
 
 namespace Web.Models.Response
 {

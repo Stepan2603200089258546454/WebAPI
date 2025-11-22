@@ -1,6 +1,5 @@
 ﻿using DataContext.Abstractions.Configurations;
 using DataContext.Abstractions.Models;
-using DataContext.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;

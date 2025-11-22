@@ -1,5 +1,4 @@
 ﻿using DataContext.Abstractions.Models;
-using DataContext.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

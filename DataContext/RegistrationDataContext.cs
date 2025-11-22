@@ -1,6 +1,6 @@
 ﻿using DataContext.Abstractions.Interfaces;
+using DataContext.Abstractions.Models;
 using DataContext.Context;
-using DataContext.Models;
 using DataContext.Repositories;
 using Domain.Options;
 using Microsoft.AspNetCore.Identity;

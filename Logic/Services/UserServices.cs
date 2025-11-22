@@ -1,5 +1,5 @@
 ﻿using DataContext.Abstractions.Interfaces;
-using DataContext.Models;
+using DataContext.Abstractions.Models;
 using DataContext.Repositories;
 using Logic.Services.Interfaces;
 using System;

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace DataContext.Models
+namespace DataContext.Abstractions.Models
 {
     public class ApplicationRole : IdentityRole
     {

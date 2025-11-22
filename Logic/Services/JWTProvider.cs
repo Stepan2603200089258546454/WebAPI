@@ -1,5 +1,4 @@
-﻿using DataContext.Models;
-using DataContext.Repositories;
+﻿using DataContext.Repositories;
 using Logic.Services.Interfaces;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
