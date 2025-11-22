@@ -8,8 +8,8 @@ namespace DataContext.Abstractions.Models
     public class Havings : IDBEntity
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public int IdPosition { get; set; }
-        public Position Position { get; set; }
+        public string? Name { get; set; }
+        public int? IdPosition { get; set; }
+        public Position? Position { get; set; }
     }
 }

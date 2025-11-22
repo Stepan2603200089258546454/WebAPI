@@ -5,6 +5,7 @@ using DataContext.Repositories;
 using Domain.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
@@ -39,14 +40,16 @@ namespace DataContext
                 }
             }
         }
-        public static void UseDB(this IHostApplicationBuilder builder)
+        public static void ConfigureDB(IServiceCollection services, IConfiguration configuration)
         {
-            builder.Services.Configure<DataBaseOptions>(builder.Configuration.GetSection(nameof(DataBaseOptions)));
-
-            builder.Services.AddDbContext<ApplicationDbContext>((provider, options) =>
+            services.Configure<DataBaseOptions>(configuration.GetSection(nameof(DataBaseOptions)));
+        }
+        public static void ConfigureDBContext(IServiceCollection services)
+        {
+            services.AddDbContext<ApplicationDbContext>((provider, options) =>
             {
                 DataBaseOptions dbOptions = provider.GetRequiredService<IOptions<DataBaseOptions>>().Value;
-                
+
                 if (dbOptions.DBType == DBType.InMemory)
                 {
                     if (dbOptions.MemorySettings is null) throw new ArgumentNullException(nameof(dbOptions.MemorySettings), "Настройки подключения к InMemory не найдены");
@@ -61,20 +64,38 @@ namespace DataContext
                     });
                 }
             });
-
-            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-            builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+        }
+        public static void ConfigureIdentity(IServiceCollection services)
+        {
+            services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddSignInManager()
                 .AddDefaultTokenProviders();
+        }
+        public static void ConfigureRepositories(IServiceCollection services)
+        {
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IDrivingSchoolRepository, DrivingSchoolRepository>();
+            services.AddScoped<IHavingsRepository, HavingsRepository>();
+            services.AddScoped<IPositionRepository, PositionRepository>();
+            services.AddScoped<IRefPositionRepository, RefPositionRepository>();
+        }
+        public static void UseDB(IServiceCollection services, IConfiguration configuration)
+        {
+            ConfigureDB(services, configuration);
 
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
-            builder.Services.AddScoped<IDrivingSchoolRepository, DrivingSchoolRepository>();
-            builder.Services.AddScoped<IHavingsRepository, HavingsRepository>();
-            builder.Services.AddScoped<IPositionRepository, PositionRepository>();
-            builder.Services.AddScoped<IRefPositionRepository, RefPositionRepository>();
+            ConfigureDBContext(services);
+
+            services.AddDatabaseDeveloperPageExceptionFilter();
+
+            ConfigureIdentity(services);
+
+            ConfigureRepositories(services);
+        }
+        public static void UseDB(this IHostApplicationBuilder builder)
+        {
+            UseDB(builder.Services, builder.Configuration);
         }
     }
 }

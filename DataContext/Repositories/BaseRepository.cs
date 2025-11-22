@@ -81,7 +81,7 @@ namespace DataContext.Repositories
         }
         public virtual async Task<int> DeleteAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
         {
-            if (_dbOptions.DBType != DBType.InMemory)
+            if (_dbOptions.DBType == DBType.InMemory)
             {
                 List<T> entityDeleted = await _table.Where(predicate).ToListAsync(cancellationToken);
                 _table.RemoveRange(entityDeleted);

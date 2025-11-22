@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace DataContext.Context
 {
-    internal class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
         public DbSet<DrivingSchool> DrivingSchools { get; set; }
         public DbSet<Havings> Havings { get; set; }
