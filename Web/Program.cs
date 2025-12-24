@@ -21,6 +21,19 @@ builder.Services.AddAutoMapper(st =>
     st.AddProfile<AppMappingProfile>();
 });
 
+// CORS политика "AllowAll"
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+        // .AllowCredentials() - если нужны учетные данные
+        // .SetPreflightMaxAge(TimeSpan.FromMinutes(10)) - кэширование preflight
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -30,6 +43,8 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseCors("AllowAll"); // Применяем политику
 
 //MS openAPI (/openapi/v1.json)
 app.MapOpenApi();

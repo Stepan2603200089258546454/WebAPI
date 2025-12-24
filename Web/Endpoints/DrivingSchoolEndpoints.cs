@@ -15,6 +15,7 @@ namespace Web.Endpoints
 
             group.MapPost("/Get", Get);
             group.MapPost("/Update", Update);
+            group.MapPost("/Add", Add);
             group.MapPost("/Delete", Delete);
 
             return group;
@@ -31,6 +32,13 @@ namespace Web.Endpoints
                     )
                 )
             );
+        }
+        private static async Task<IResult> Add(
+            AddDrivingSchoolRequest request,
+            [FromServices] IDrivingSchoolService service)
+        {
+            await service.AddAsync(request.Name, request.Adress);
+            return TypedResults.Ok();
         }
         private static async Task<IResult> Update(
             UpdateDrivingSchoolRequest request,

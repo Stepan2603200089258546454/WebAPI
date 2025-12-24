@@ -25,8 +25,8 @@ namespace Logic.Services
                 SecurityAlgorithms.HmacSha256);
             var token = new JwtSecurityToken(
                 signingCredentials: credentials,
-                
                 expires: DateTime.UtcNow.AddHours(_options.ExpiredHours));
+                //expires: DateTime.Now.AddHours(_options.ExpiredHours));
             var tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
             return tokenValue;
         }

@@ -106,6 +106,16 @@ namespace Logic
                             context.Token = context.Request.Cookies[JwtBearerDefaults.AuthenticationScheme];
 
                         return Task.CompletedTask;
+                    },
+                    OnAuthenticationFailed = context =>
+                    {
+                        Console.WriteLine($"Authentication failed: {context.Exception.Message}");
+                        return Task.CompletedTask;
+                    },
+                    OnChallenge = context =>
+                    {
+                        Console.WriteLine($"Challenge: {context.Error}, {context.ErrorDescription}");
+                        return Task.CompletedTask;
                     }
                 };
 #endif

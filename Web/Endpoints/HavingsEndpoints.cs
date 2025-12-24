@@ -15,6 +15,7 @@ namespace Web.Endpoints
 
             group.MapPost("/Get", Get);
             group.MapPost("/Update", Update);
+            group.MapPost("/Add", Add);
             group.MapPost("/Delete", Delete);
 
             return group;
@@ -37,6 +38,13 @@ namespace Web.Endpoints
             [FromServices] IHavingsService service)
         {
             await service.UpdateAsync(request.Id, request.Name, request.IdPosition);
+            return TypedResults.Ok();
+        }
+        private static async Task<IResult> Add(
+            AddHavingsRequest request,
+            [FromServices] IHavingsService service)
+        {
+            await service.AddAsync(request.Name, request.IdPosition);
             return TypedResults.Ok();
         }
         private static async Task<IResult> Delete(
